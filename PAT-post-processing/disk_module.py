@@ -43,6 +43,8 @@ class Disk(pat_base):
         self.data_array = self.get_data(file_path)
         self.time_stamp_array = []
         self.ts_sum = []
+        self.avg_array_disk1 = []
+        self.avg_array_disk2 = []
         self.avg_array = self.extract_data()
 
     def extract_data(self):
@@ -50,6 +52,7 @@ class Disk(pat_base):
         in an array avg_array[]"""
         self.avg_array = []
         self.title_line = self.data_array[0]
+        self.device_index = self.title_line.index("Device:")
         self.rps_index = self.title_line.index("r/s")
         self.wps_index = self.title_line.index("w/s")
         self.ts_index = self.title_line.index("TimeStamp")
@@ -70,6 +73,18 @@ class Disk(pat_base):
         self.wkbps = []
         self.await = []
         self.svctm = []
+        self.rps_disk1 = []
+        self.wps_disk1 = []
+        self.rkbps_disk1 = []
+        self.wkbps_disk1 = []
+        self.await_disk1 = []
+        self.svctm_disk1 = []
+        self.rps_disk2 = []
+        self.wps_disk2 = []
+        self.rkbps_disk2 = []
+        self.wkbps_disk2 = []
+        self.await_disk2 = []
+        self.svctm_disk2 = []
         for self.row in self.data_array:
             self.rps.append(float(self.row[self.rps_index]))
             self.wps.append(float(self.row[self.wps_index]))
@@ -77,6 +92,21 @@ class Disk(pat_base):
             self.wkbps.append(float(self.row[self.wkbps_index]))
             self.await.append(float(self.row[self.await_index]))
             self.svctm.append(float(self.row[self.svctm_index]))
+            if "nvme0n1" in self.row[self.device_index]:
+                self.rps_disk1.append(float(self.row[self.rps_index]))
+                self.wps_disk1.append(float(self.row[self.wps_index]))
+                self.rkbps_disk1.append(float(self.row[self.rkbps_index]))
+                self.wkbps_disk1.append(float(self.row[self.wkbps_index]))
+                self.await_disk1.append(float(self.row[self.await_index]))
+                self.svctm_disk1.append(float(self.row[self.svctm_index]))
+            elif "nvme1n1" in self.row[self.device_index]:
+                self.rps_disk2.append(float(self.row[self.rps_index]))
+                self.wps_disk2.append(float(self.row[self.wps_index]))
+                self.rkbps_disk2.append(float(self.row[self.rkbps_index]))
+                self.wkbps_disk2.append(float(self.row[self.wkbps_index]))
+                self.await_disk2.append(float(self.row[self.await_index]))
+                self.svctm_disk2.append(float(self.row[self.svctm_index]))
+
 
         self.ts_sum = []
         self.avg_ind = 0
@@ -90,6 +120,7 @@ class Disk(pat_base):
                     self.avg_ind += 1
             elif (self.index == 0):
                 self.ts_sum.append(self.time_stamp_array[self.index])
+        
         self.avg_array.append(self.ts_sum)
 
         # calculate sum writes and reads to all disks
@@ -111,8 +142,67 @@ class Disk(pat_base):
         self.svctm_sum = self.get_sum(self.svctm_index, self.svctm)
         self.avg_array.append(self.svctm_sum)
 
+
+        self.avg_array_disk1.append(self.ts_sum)
+
+        # calculate sum writes and reads to all disks
+        self.wps_sum = self.get_sum_for_a_disk(self.wps_index, self.wps_disk1)
+        self.avg_array_disk1.append(self.wps_sum)
+
+        self.rps_sum = self.get_sum_for_a_disk(self.rps_index, self.rps_disk1)
+        self.avg_array_disk1.append(self.rps_sum)
+
+        self.wkbps_sum = self.get_sum_for_a_disk(self.wkbps_index, self.wkbps_disk1)
+        self.avg_array_disk1.append(self.wkbps_sum)
+
+        self.rkbps_sum = self.get_sum_for_a_disk(self.rkbps_index, self.rkbps_disk1)
+        self.avg_array_disk1.append(self.rkbps_sum)
+
+        self.await_sum = self.get_sum_for_a_disk(self.await_index, self.await_disk1)
+        self.avg_array_disk1.append(self.await_sum)
+
+        self.svctm_sum = self.get_sum_for_a_disk(self.svctm_index, self.svctm_disk1)
+        self.avg_array_disk1.append(self.svctm_sum)
+
+
+        self.avg_array_disk2.append(self.ts_sum)
+
+        # calculate sum writes and reads to all disks
+        self.wps_sum = self.get_sum_for_a_disk(self.wps_index, self.wps_disk2)
+        self.avg_array_disk2.append(self.wps_sum)
+
+        self.rps_sum = self.get_sum_for_a_disk(self.rps_index, self.rps_disk2)
+        self.avg_array_disk2.append(self.rps_sum)
+
+        self.wkbps_sum = self.get_sum_for_a_disk(self.wkbps_index, self.wkbps_disk2)
+        self.avg_array_disk2.append(self.wkbps_sum)
+
+        self.rkbps_sum = self.get_sum_for_a_disk(self.rkbps_index, self.rkbps_disk2)
+        self.avg_array_disk2.append(self.rkbps_sum)
+
+        self.await_sum = self.get_sum_for_a_disk(self.await_index, self.await_disk2)
+        self.avg_array_disk2.append(self.await_sum)
+
+        self.svctm_sum = self.get_sum_for_a_disk(self.svctm_index, self.svctm_disk2)
+        self.avg_array_disk2.append(self.svctm_sum)
+
         self.data_array.insert(0, self.title_line)
         return self.avg_array
+
+    def get_sum_for_a_disk(self, index, data):
+        """add the reads and writes for all disks"""
+        self.sum_array = []
+        self.avg_ind = 0
+        i = 0
+        for self.index, self.row in enumerate(self.time_stamp_array):
+            if (self.index != 0):
+                if (self.time_stamp_array[self.index] ==
+                        self.time_stamp_array[self.index-1]):
+                    pass
+                else:
+                    self.sum_array.append(data[i])
+                    i += 1
+        return self.sum_array
 
     def get_sum(self, index, data):
         """add the reads and writes for all disks"""
@@ -228,25 +318,227 @@ def get_avg_data(cluster, name_node):
         return None
 
 
-def plot_graph(data, pp, graph_title):
-    """plot all graphs related to disk"""
+# compute non-zero value average
+def compute_nonzero_avg(data):
 
-    data, res = get_data_for_graph(data)
+    avg = 0
+    count = 0
+    for val in data:
+        if val > 16:
+            avg = avg + val
+            count = count + 1
+
+    avg = avg /count
+    #print "Avg * count = " , avg * count
+
+    return avg, count
+    
+def plot_graph2(data1, data2, pp, graph_title, result_path):
+    """plot all graphs related to disk"""
+    
+    data1, res = get_data_for_graph(data1)
+    data2, res = get_data_for_graph(data2)
+    
     time_stamp_array = []
-    for entry in data[0]:
+    for entry in data1[0]:
         time_stamp_array.append(float(entry))
+
+    time_stamp_array.pop() #FIXME: why is there an offset with time and data??
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
     if res < 1:
         res = 1
-    fig_caption = "resolution - 1:" + str(res)
+    #fig_caption = "resolution - 1:" + str(res)
+    fig_caption = ""
     fig.text(0.14, 0.89, fig_caption, fontsize=10,
              horizontalalignment='left', verticalalignment='top')
 
     x = time_stamp_array
     # plot graphs
+
+    data1_avg_w, count = compute_nonzero_avg(data1[1])
+    data1_avg_r, count = compute_nonzero_avg(data1[2])
+    data2_avg_w, count = compute_nonzero_avg(data2[1])
+    data2_avg_r, count = compute_nonzero_avg(data2[2])
+    print "Avg wr IOPS input/output: " , data1_avg_w
+    print "Avg rd IOPS input/output: " , data1_avg_r
+    print "Avg wr IOPS tmp:          " , data2_avg_w
+    print "Avg rd IOPS tmp:          " , data2_avg_r
+
+    ax.plot(x, data1[1], label='input/output w/s',
+            color='#800000', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.plot(x, data1[2], label='input/output r/s',
+            color='#00297A', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.fill_between(x, 0, data1[1], facecolor='#800000',
+                    alpha=0.45, linewidth=0.01, rasterized=True)
+    ax.fill_between(x, 0, data1[2], rasterized=True,
+                    facecolor='#00297A', alpha=0.45, linewidth=0.01)
+
+    ax.plot(x, data2[1], label='tmp w/s',
+            color='#FFA500', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.plot(x, data2[2], label='tmp r/s',
+            color='#9ACD32', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.fill_between(x, 0, data2[1], facecolor='#FFA500',
+                    alpha=0.45, linewidth=0.01, rasterized=True)
+    ax.fill_between(x, 0, data2[2], rasterized=True,
+                    facecolor='#9ACD32', alpha=0.45, linewidth=0.01)
+    ax.legend(framealpha=0.5)
+    x1, x2, y1, y2 = ax.axis()
+    # set axes
+    ax.axis((min(x), max(x), 0, y2))
+    # set xlabel, ylabel and title
+    ax.set_ylabel('requests/second')
+    ax.set_xlabel('time(s)')
+    ax.set_title(graph_title + ' Disk IO requests')
+    ax.grid(True)
+    fig.text(0.95, 0.05, pp.get_pagecount()+1, fontsize=10)
+    plt.axhline(y=data1_avg_w, color='#800000', linestyle='--')
+    plt.axhline(y=data1_avg_r, color='#00297A', linestyle='--')
+    plt.axhline(y=data2_avg_w, color='#FFA500', linestyle='--')
+    plt.axhline(y=data2_avg_r, color='#9ACD32', linestyle='--')
+    pp.savefig(dpi=200)
+    plt.clf()
+    plt.close()
+
+    # define new figure
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    #fig_caption = "resolution - 1:" + str(res)
+    fig_caption = ""
+    fig.text(0.14, 0.89, fig_caption, fontsize=10,
+             horizontalalignment='left', verticalalignment='top')
+    # plot graphs
+    data1[3][:] = [i / 1000 for i in data1[3]]
+    data1[4][:] = [i / 1000 for i in data1[4]]
+    data2[3][:] = [i / 1000 for i in data2[3]]
+    data2[4][:] = [i / 1000 for i in data2[4]]
+    
+    data1_avg_w_mb, count1_w_mb = compute_nonzero_avg(data1[3])
+    data1_avg_r_mb, count1_r_mb = compute_nonzero_avg(data1[4])
+    data2_avg_w_mb, count2_w_mb = compute_nonzero_avg(data2[3])
+    data2_avg_r_mb, count2_r_mb = compute_nonzero_avg(data2[4])
+
+    print ""
+    print "Avg wr MB/s input/output: " , data1_avg_w_mb
+    print "Avg rd MB/s input/output: " , data1_avg_r_mb
+    print "Avg wr MB/s tmp:          " , data2_avg_w_mb
+    print "Avg rd MB/s tmp:          " , data2_avg_r_mb
+
+    data1_w_mb = data1_avg_w_mb * count1_w_mb
+    data1_r_mb = data1_avg_r_mb * count1_r_mb
+    data2_w_mb = data2_avg_w_mb * count2_w_mb
+    data2_r_mb = data2_avg_r_mb * count2_r_mb
+
+    filename = result_path + '/disk_avg_stats.csv'
+    f = open(filename, 'w')
+    print >> f, data1_avg_w,',',data1_avg_r,',',data2_avg_w,',',data2_avg_r,',',data1_avg_w_mb,',',data1_avg_r_mb,',',data2_avg_w_mb,',',data2_avg_r_mb,',',data1_w_mb,',',data1_r_mb,',',data2_w_mb,',',data2_r_mb
+
+    ax.plot(x, data1[3], label='input/output write MB/s',
+            color='#800000', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.plot(x, data1[4], label='input/output read MB/s',
+            color='#00297A', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.fill_between(x, 0, data1[3], facecolor='#800000',
+                    alpha=0.45, linewidth=0.01, rasterized=True)
+    ax.fill_between(x, 0, data1[4], rasterized=True,
+                    facecolor='#00297A', alpha=0.45, linewidth=0.01)
+
+    ax.plot(x, data2[3], label='tmp write MB/s',
+            color='#FFA500', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.plot(x, data2[4], label='tmp read MB/s',
+            color='#9ACD32', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.fill_between(x, 0, data2[3], facecolor='#FFA500',
+                    alpha=0.45, linewidth=0.01, rasterized=True)
+    ax.fill_between(x, 0, data2[4], rasterized=True,
+                    facecolor='#9ACD32', alpha=0.45, linewidth=0.01)
+
+    ax.legend(framealpha=0.5)
+    x1, x2, y1, y2 = ax.axis()
+    # set axes
+    ax.axis((min(x), max(x), 0, y2))
+    # set xlabel, ylabel and title
+    ax.set_ylabel('Bandwidth(MB/s)')
+    ax.set_xlabel('time(s)')
+    ax.set_title(graph_title + ' Disk Bandwidth')
+    ax.grid(True)
+    fig.text(0.95, 0.05, pp.get_pagecount()+1, fontsize=10)
+    plt.axhline(y=data1_avg_w_mb, color='#800000', linestyle='--')
+    plt.axhline(y=data1_avg_r_mb, color='#00297A', linestyle='--')
+    plt.axhline(y=data2_avg_w_mb, color='#FFA500', linestyle='--')
+    plt.axhline(y=data2_avg_r_mb, color='#9ACD32', linestyle='--')
+    pp.savefig(dpi=200)
+    plt.clf()
+    plt.close()
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    #fig_caption = "resolution - 1:" + str(res)
+    fig_caption = ""
+    fig.text(0.14, 0.89, fig_caption, fontsize=10,
+             horizontalalignment='left', verticalalignment='top')
+    # plot graphs
+    ax.plot(x, data1[5], label='input/output await',
+            color='#00297A', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.plot(x, data1[6], label='input/output svctm',
+            color='#800000', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.fill_between(x, 0, data1[5], facecolor='#00297A',
+                    alpha=0.45, linewidth=0.01, rasterized=True)
+    ax.fill_between(x, 0, data1[6], rasterized=True,
+                    facecolor='#800000', alpha=0.45, linewidth=0.01)
+
+
+    ax.plot(x, data2[5], label='tmp await',
+            color='#9ACD32', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.plot(x, data2[6], label='tmp svctm',
+            color='#FFA500', alpha=0.9, linewidth=0.5, rasterized=True)
+    ax.fill_between(x, 0, data2[5], facecolor='#9ACD32',
+                    alpha=0.45, linewidth=0.01, rasterized=True)
+    ax.fill_between(x, 0, data2[6], rasterized=True,
+                    facecolor='#FFA500', alpha=0.45, linewidth=0.01)
+
+
+    ax.legend(framealpha=0.5)
+    x1, x2, y1, y2 = ax.axis()
+    ax.axis((min(x), max(x), 0, y2))
+    ax.set_ylabel('number of requests')
+    ax.set_xlabel('time(s)')
+    ax.set_title(graph_title + ' Disk IO latencies')
+    ax.grid(True)
+    fig.text(0.95, 0.05, pp.get_pagecount()+1, fontsize=10)
+    pp.savefig(dpi=200)
+    plt.clf()
+    plt.close()
+
+
+def plot_graph(data, pp, graph_title):
+    """plot all graphs related to disk"""
+    
+    data, res = get_data_for_graph(data)
+    
+    time_stamp_array = []
+    for entry in data[0]:
+        time_stamp_array.append(float(entry))
+
+    time_stamp_array.pop() #FIXME: why is there an offset with time and data??
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    if res < 1:
+        res = 1
+    #fig_caption = "resolution - 1:" + str(res)
+    fig_caption = ""
+    fig.text(0.14, 0.89, fig_caption, fontsize=10,
+             horizontalalignment='left', verticalalignment='top')
+
+    x = time_stamp_array
+    # plot graphs
+
+    print "len data[0]", len(data[0])
+    print "len data[1]", len(data[1])
+
+
     ax.plot(x, data[1], label='w/s',
             color='#800000', alpha=0.9, linewidth=0.5, rasterized=True)
     ax.plot(x, data[2], label='r/s',
@@ -272,7 +564,8 @@ def plot_graph(data, pp, graph_title):
     # define new figure
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    fig_caption = "resolution - 1:" + str(res)
+    #fig_caption = "resolution - 1:" + str(res)
+    fig_caption = ""
     fig.text(0.14, 0.89, fig_caption, fontsize=10,
              horizontalalignment='left', verticalalignment='top')
     # plot graphs
@@ -301,7 +594,8 @@ def plot_graph(data, pp, graph_title):
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    fig_caption = "resolution - 1:" + str(res)
+    #fig_caption = "resolution - 1:" + str(res)
+    fig_caption = ""
     fig.text(0.14, 0.89, fig_caption, fontsize=10,
              horizontalalignment='left', verticalalignment='top')
     # plot graphs

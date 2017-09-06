@@ -328,8 +328,14 @@ def generate_output(cluster):
             if en_all_disk == 'yes' or en_all_disk == 'Yes':
                 if hasattr(node, 'disk_obj'):
                     node_name = node.disk_obj.data_array[1][0]
-                    disk_module.plot_graph(
-                        node.disk_obj.avg_array, pp, str(node_name))
+                    #disk_module.plot_graph(
+                    #    node.disk_obj.avg_array, pp, str(node_name))
+                    #disk_module.plot_graph(
+                    #    node.disk_obj.avg_array_disk1, pp, "nvme0")
+                    #disk_module.plot_graph(
+                    #    node.disk_obj.avg_array_disk2, pp, "nvme1")
+                    disk_module.plot_graph2(
+                            node.disk_obj.avg_array_disk1, node.disk_obj.avg_array_disk2, pp, "Disk Utilization: Input/Output & tmp", result_path)
             if en_all_net == 'yes' or en_all_net == 'Yes':
                 node_name = node.net_obj.data_array[1][0]
                 net_module.plot_graph(
