@@ -43,7 +43,7 @@ cur_python_version = sys.version_info
 #cur_version[:2] will give you first two elements of the list
 if cur_python_version[:2] >= (2,7):
     found = True
-    print "---- You currently have Python " + sys.version
+    #print "---- You currently have Python " + sys.version
 else:
     found = False
     print "---- Error, You need python 2.7.x+ and currently you have " + sys.version
@@ -59,7 +59,7 @@ try:
         print "---- You currently have matplotlib " + matplotlib.__version__
     else:   
         found = False
-        print "---- Error, You need matplotlib 1.3.1+ and currently you have " + matplotlib.__version__
+        #print "---- Error, You need matplotlib 1.3.1+ and currently you have " + matplotlib.__version__
 
 except ImportError: #handle exception
     found = False
@@ -73,7 +73,7 @@ try:
     req_xlsxwriter_version = '0.6.3'.replace(".", "")
     if cur_xlsxwriter_version.isdigit() >= req_xlsxwriter_version.isdigit():
         found = True
-        print "---- You currently have xlsxwriter " + xlsxwriter.__version__
+        #print "---- You currently have xlsxwriter " + xlsxwriter.__version__
     else:   
         found = False
         print "---- Error, You need xlsxwriter 0.6.3+ and currently you have " + xlsxwriter.__version__
@@ -88,9 +88,9 @@ if found is False:
     print '---- Must use Python 2.7 or grater' + \
     '\n---- dependencies missing - exiting script >>>>>>>>>>>'
     sys.exit()
-else:
-    print '---- You have all required dependencies' + \
-    '\n---- PAT-post-processing script will start automatically'
+#else:
+    #print '---- You have all required dependencies' + \
+    #'\n---- PAT-post-processing script will start automatically'
 
 
 def get_dirpaths(directory):
@@ -287,9 +287,12 @@ def generate_output(cluster):
 
         # print average disk utilization graph to pdf
         if en_avg_disk == 'yes' or en_avg_disk == 'Yes':
-            disk_data = disk_module.get_avg_data(cluster, name_node)
-            if disk_data is not None:
-                disk_module.plot_graph(disk_data, pp, 'All-nodes average')
+            disk_data, disk1_data, disk2_data = disk_module.get_avg_data(cluster, name_node)
+            if len(disk2_data) > 0:
+                #disk_module.plot_graph(disk_data, pp, 'All-nodes average', result_path)
+                disk_module.plot_graph2(disk1_data, disk2_data, pp, 'All-nodes average', result_path)
+            elif disk1_data is not None:
+                disk_module.plot_graph(disk_data, pp, 'All-nodes average', result_path)
 
         # print average network utilization graph to pdf
         if en_avg_net == 'yes' or en_avg_net == 'Yes':
@@ -328,14 +331,11 @@ def generate_output(cluster):
             if en_all_disk == 'yes' or en_all_disk == 'Yes':
                 if hasattr(node, 'disk_obj'):
                     node_name = node.disk_obj.data_array[1][0]
-                    #disk_module.plot_graph(
-                    #    node.disk_obj.avg_array, pp, str(node_name))
-                    #disk_module.plot_graph(
-                    #    node.disk_obj.avg_array_disk1, pp, "nvme0")
-                    #disk_module.plot_graph(
-                    #    node.disk_obj.avg_array_disk2, pp, "nvme1")
-                    disk_module.plot_graph2(
-                            node.disk_obj.avg_array_disk1, node.disk_obj.avg_array_disk2, pp, "Disk Utilization: Input/Output & tmp", result_path)
+                    if (len(node.disk_obj.avg_array_disk2) > 0):
+                        disk_module.plot_graph2(
+                            node.disk_obj.avg_array_disk1, node.disk_obj.avg_array_disk2, pp, "Single-Node Disk Utilization: input/output & tmp", result_path)
+                    else:
+                        disk_module.plot_graph(node.disk_obj.avg_array_disk1, pp, "Single-Node Disk Utilization", result_path)
             if en_all_net == 'yes' or en_all_net == 'Yes':
                 node_name = node.net_obj.data_array[1][0]
                 net_module.plot_graph(
