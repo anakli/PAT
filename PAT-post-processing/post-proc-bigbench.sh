@@ -11,9 +11,9 @@ fi
 
 query_name=$1
 
-mkdir -p /home/anakli/PAT/PAT-collecting-data/results/$query_name
-mkdir -p /home/anakli/PAT/PAT-collecting-data/results/$query_name/pdf
-mkdir -p /home/anakli/PAT/PAT-collecting-data/results/$query_name/disk_stats
+mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/$query_name
+mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/$query_name/pdf
+mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/$query_name/disk_stats
 
 
 for test_name in bigbench-$query_name-*
@@ -47,12 +47,12 @@ do
 	sed -i "97s/if \"[a-z 0-9]*\" in/if \"${disk1}\" in/" disk_module.py
 	sed -i "105s/elif \"[a-z 0-9]*\" in/elif \"${disk2}\" in/" disk_module.py
 
-	sed -i "55s/.*/\t<source>\/home\/anakli\/PAT\/PAT-collecting-data\/results\/${test_name}\/instruments<\/source>/" config.xml
+	sed -i "55s/.*/\t<source>\/home\/ubuntu\/PAT\/PAT-collecting-data\/results\/${test_name}\/instruments<\/source>/" config.xml
 	./pat-post-process.py
-	cp /home/anakli/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/anakli/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-$test_name-postproc.pdf
-	cp /home/anakli/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/anakli/PAT/PAT-collecting-data/results/$test_name/instruments/disk-avg-stats-$test_name.csv
-	cp /home/anakli/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/anakli/PAT/PAT-collecting-data/results/$query_name/pdf/PAT-$test_name-postproc.pdf
-	cp /home/anakli/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/anakli/PAT/PAT-collecting-data/results/$query_name/disk_stats/disk-avg-stats-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-$test_name-postproc.pdf
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk-avg-stats-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/$query_name/pdf/PAT-$test_name-postproc.pdf
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/$query_name/disk_stats/disk-avg-stats-$test_name.csv
 
 	#break
 	cd ~/PAT/PAT-collecting-data/results

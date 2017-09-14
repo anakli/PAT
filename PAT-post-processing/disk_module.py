@@ -147,28 +147,28 @@ class Disk(pat_base):
 
         self.avg_array_disk1.append(self.ts_sum)
 
-        # calculate sum writes and reads to all disks
-        self.wps_sum = self.get_sum_for_a_disk(self.wps_index, self.wps_disk1)
-        self.avg_array_disk1.append(self.wps_sum)
-
-        self.rps_sum = self.get_sum_for_a_disk(self.rps_index, self.rps_disk1)
-        self.avg_array_disk1.append(self.rps_sum)
-
-        self.wkbps_sum = self.get_sum_for_a_disk(self.wkbps_index, self.wkbps_disk1)
-        self.avg_array_disk1.append(self.wkbps_sum)
-
-        self.rkbps_sum = self.get_sum_for_a_disk(self.rkbps_index, self.rkbps_disk1)
-        self.avg_array_disk1.append(self.rkbps_sum)
-
-        self.await_sum = self.get_sum_for_a_disk(self.await_index, self.await_disk1)
-        self.avg_array_disk1.append(self.await_sum)
-
-        self.svctm_sum = self.get_sum_for_a_disk(self.svctm_index, self.svctm_disk1)
-        self.avg_array_disk1.append(self.svctm_sum)
-
-
-        # calculate sum writes and reads to all disks
         if use_disk2 == 1:
+            #calculate sum writes and reads to all disks
+	    self.wps_sum = self.get_sum_for_a_disk(self.wps_index, self.wps_disk1)
+	    self.avg_array_disk1.append(self.wps_sum)
+	
+            self.rps_sum = self.get_sum_for_a_disk(self.rps_index, self.rps_disk1)
+            self.avg_array_disk1.append(self.rps_sum)
+
+            self.wkbps_sum = self.get_sum_for_a_disk(self.wkbps_index, self.wkbps_disk1)
+            self.avg_array_disk1.append(self.wkbps_sum)
+
+            self.rkbps_sum = self.get_sum_for_a_disk(self.rkbps_index, self.rkbps_disk1)
+            self.avg_array_disk1.append(self.rkbps_sum)
+
+            self.await_sum = self.get_sum_for_a_disk(self.await_index, self.await_disk1)
+            self.avg_array_disk1.append(self.await_sum)
+
+            self.svctm_sum = self.get_sum_for_a_disk(self.svctm_index, self.svctm_disk1)
+            self.avg_array_disk1.append(self.svctm_sum)
+
+
+            # calculate sum writes and reads to all disks
             self.avg_array_disk2.append(self.ts_sum)
             
             self.wps_sum = self.get_sum_for_a_disk(self.wps_index, self.wps_disk2)
@@ -199,6 +199,8 @@ class Disk(pat_base):
         self.sum_array = []
         self.avg_ind = 0
         i = 0
+    	#if len(self.time_stamp_array) > len(data[0]):
+        #	self.time_stamp_array.pop() #FIXME: why is there an offset with time and data??
         for self.index, self.row in enumerate(self.time_stamp_array):
             if (self.index != 0):
                 if (self.time_stamp_array[self.index] ==
@@ -304,55 +306,55 @@ def get_avg_data(cluster, name_node):
                         count_dic.update(dict([(node.disk_obj.ts_sum[
                             index], 1)]))
 
-                    #dic1
-                    wps = wps_dic1.get(node.disk_obj.ts_sum[index])
-                    if wps is not None:
-                        wps += node.disk_obj.avg_array_disk1[1][index]
-                        wps_dic1.update(dict([(node.disk_obj.ts_sum[index],
-                                       wps)]))
-                        rps = rps_dic1.get(node.disk_obj.ts_sum[index])
-                        rps += node.disk_obj.avg_array_disk1[2][index]
-                        rps_dic1.update(dict([(node.disk_obj.ts_sum[index],
-                                            rps)]))
-                        wkbps = wkbps_dic1.get(node.disk_obj.ts_sum[index])
-                        wkbps += node.disk_obj.avg_array_disk1[3][index]
-                        wkbps_dic1.update(dict([(node.disk_obj.ts_sum[index],
-                                                wkbps)]))
-                        rkbps = rkbps_dic1.get(node.disk_obj.ts_sum[index])
-                        rkbps += node.disk_obj.avg_array_disk1[4][index]
-                        rkbps_dic1.update(dict([(node.disk_obj.ts_sum[index],
-                                                rkbps)]))
-                        await = await_dic1.get(node.disk_obj.ts_sum[index])
-                        await += node.disk_obj.avg_array_disk1[5][index]
-                        await_dic1.update(dict([(node.disk_obj.ts_sum[index],
-                                                await)]))
-                        svctm = svctm_dic1.get(node.disk_obj.ts_sum[index])
-                        svctm += node.disk_obj.avg_array_disk1[6][index]
-                        svctm_dic1.update(dict([(node.disk_obj.ts_sum[index],
-                                                svctm)]))
-                        cnt = count_dic1.get(node.disk_obj.ts_sum[index])
-                        cnt += 1
-                        count_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], cnt)]))
-                    else:
-                        wps_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], node.disk_obj.avg_array_disk1[1][index])]))
-                        rps_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], node.disk_obj.avg_array_disk1[2][index])]))
-                        wkbps_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], node.disk_obj.avg_array_disk1[3][index])]))
-                        rkbps_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], node.disk_obj.avg_array_disk1[4][index])]))
-                        await_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], node.disk_obj.avg_array_disk1[5][index])]))
-                        svctm_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], node.disk_obj.avg_array_disk1[6][index])]))
-                        count_dic1.update(dict([(node.disk_obj.ts_sum[
-                            index], 1)]))
-
-                    #dic2
                     if len(node.disk_obj.avg_array_disk2) > 0:
+                        #dic1
                         use_disk2 = True
+                        wps = wps_dic1.get(node.disk_obj.ts_sum[index])
+                        if wps is not None:
+                            wps += node.disk_obj.avg_array_disk1[1][index]
+                            wps_dic1.update(dict([(node.disk_obj.ts_sum[index],
+                                           wps)]))
+                            rps = rps_dic1.get(node.disk_obj.ts_sum[index])
+                            rps += node.disk_obj.avg_array_disk1[2][index]
+                            rps_dic1.update(dict([(node.disk_obj.ts_sum[index],
+                                                rps)]))
+                            wkbps = wkbps_dic1.get(node.disk_obj.ts_sum[index])
+                            wkbps += node.disk_obj.avg_array_disk1[3][index]
+                            wkbps_dic1.update(dict([(node.disk_obj.ts_sum[index],
+                                                    wkbps)]))
+                            rkbps = rkbps_dic1.get(node.disk_obj.ts_sum[index])
+                            rkbps += node.disk_obj.avg_array_disk1[4][index]
+                            rkbps_dic1.update(dict([(node.disk_obj.ts_sum[index],
+                                                    rkbps)]))
+                            await = await_dic1.get(node.disk_obj.ts_sum[index])
+                            await += node.disk_obj.avg_array_disk1[5][index]
+                            await_dic1.update(dict([(node.disk_obj.ts_sum[index],
+                                                    await)]))
+                            svctm = svctm_dic1.get(node.disk_obj.ts_sum[index])
+                            svctm += node.disk_obj.avg_array_disk1[6][index]
+                            svctm_dic1.update(dict([(node.disk_obj.ts_sum[index],
+                                                    svctm)]))
+                            cnt = count_dic1.get(node.disk_obj.ts_sum[index])
+                            cnt += 1
+                            count_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], cnt)]))
+                        else:
+                            wps_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], node.disk_obj.avg_array_disk1[1][index])]))
+                            rps_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], node.disk_obj.avg_array_disk1[2][index])]))
+                            wkbps_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], node.disk_obj.avg_array_disk1[3][index])]))
+                            rkbps_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], node.disk_obj.avg_array_disk1[4][index])]))
+                            await_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], node.disk_obj.avg_array_disk1[5][index])]))
+                            svctm_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], node.disk_obj.avg_array_disk1[6][index])]))
+                            count_dic1.update(dict([(node.disk_obj.ts_sum[
+                                index], 1)]))
+
+                        #dic2
                         wps = wps_dic2.get(node.disk_obj.ts_sum[index])
                         if wps is not None:
                             wps += node.disk_obj.avg_array_disk2[1][index]
@@ -636,6 +638,11 @@ def plot_graph2(data1, data2, pp, graph_title, result_path):
     f = open(filename, 'w')
     print >> f, data1_avg_w,',',data1_avg_r,',',data2_avg_w,',',data2_avg_r,',',data1_avg_w_mb,',',data1_avg_r_mb,',',data2_avg_w_mb,',',data2_avg_r_mb,',',data1_w_mb,',',data1_r_mb,',',data2_w_mb,',',data2_r_mb
 
+    filename1 = result_path + '/perf.csv'
+    f = open(filename1, 'w')
+    approx_time = len(time_stamp_array) - 31
+    print >> f, approx_time
+    
     ax.plot(x, data1[3], label='input/output write MB/s',
             color='#800000', alpha=0.9, linewidth=0.5, rasterized=True)
     ax.plot(x, data1[4], label='input/output read MB/s',
@@ -791,6 +798,11 @@ def plot_graph(data, pp, graph_title, result_path):
     f = open(filename, 'w')
     print >> f, data_avg_w,',', data_avg_r,',',data_avg_w_mb,',',data_avg_r_mb,',',data_w_mb,',',data_r_mb
 
+    filename1 = result_path + '/perf.csv'
+    f = open(filename1, 'w')
+    approx_time = len(time_stamp_array) - 31
+    print >> f, approx_time
+    
     # plot graphs
     ax.plot(x, data[3], label='write MB/s',
             color='#800000', alpha=0.9, linewidth=0.5, rasterized=True)
