@@ -33,6 +33,7 @@ import matplotlib.patches as mpatches
 import numpy as np
 from pat_abc import pat_base
 import csv
+from numpy import mean
 
 
 class Cpu(pat_base):
@@ -195,7 +196,7 @@ def get_avg_data(cluster, name_node):
         return None
 
 
-def plot_graph(data_array, pp, graph_title):
+def plot_graph(data_array, pp, graph_title, result_path):
     """plot all cpu related graphs"""
 
     # data_array1 = data_array
@@ -240,6 +241,24 @@ def plot_graph(data_array, pp, graph_title):
             float(entry) + steal_percent[index])
 
     x = time_stamp_array
+
+    sum_cpu = 0
+    sum_iowait = 0
+    count = 0.0
+    for d in range(30, len(time_stamp_array) -1):
+        sum_cpu = sum_cpu + data_array[1][d] + data_array[3][d]
+        sum_iowait = sum_iowait + data_array[4][d]
+        count = count + 1
+    avg_cpu_util = sum_cpu / count
+    avg_iowait = sum_iowait / count
+    
+    print "\n Avg cpu utilization: ", avg_cpu_util
+    print "Avg iowait time: ", avg_iowait
+    
+    filename = result_path + '/cpu_stats.csv'
+    f = open(filename, 'w')
+    print >> f, avg_cpu_util,',', avg_iowait
+
 
     # new figure
     fig = plt.figure()
@@ -295,6 +314,8 @@ def plot_graph(data_array, pp, graph_title):
     ax1.set_title(graph_title + ' cpu utilization')
     ax1.grid(True)
     fig.text(0.95, 0.05, pp.get_pagecount()+1, fontsize=10)
+    plt.axhline(y=avg_cpu_util, color='#800000', linestyle='--')
+    plt.axhline(y=avg_iowait, color='#00297A', linestyle='--')
     pp.savefig(dpi=200)
     plt.clf()
     plt.close()

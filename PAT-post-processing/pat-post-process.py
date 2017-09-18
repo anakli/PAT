@@ -283,7 +283,7 @@ def generate_output(cluster):
         if en_avg_cpu == 'yes' or en_avg_cpu == 'Yes':
             cpu_data = cpu_module.get_avg_data(cluster, name_node)
             if cpu_data is not None:
-                cpu_module.plot_graph(cpu_data, pp, 'All-nodes average')
+                cpu_module.plot_graph(cpu_data, pp, 'All-nodes average', result_path)
 
         # print average disk utilization graph to pdf
         if en_avg_disk == 'yes' or en_avg_disk == 'Yes':
@@ -327,7 +327,7 @@ def generate_output(cluster):
                 if hasattr(node, 'cpu_obj'):
                     node_name = node.cpu_obj.data_array[1][0]
                     cpu_module.plot_graph(
-                        node.cpu_obj.avg_array, pp, str(node_name))
+                        node.cpu_obj.avg_array, pp, str(node_name), result_path)
             if en_all_disk == 'yes' or en_all_disk == 'Yes':
                 if hasattr(node, 'disk_obj'):
                     node_name = node.disk_obj.data_array[1][0]

@@ -15,6 +15,7 @@ mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name
 mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/pdf
 mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/disk_stats
 mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/perf
+mkdir -p /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/cpu_stats
 
 
 for test_name in tpcds-$query_name-*
@@ -52,6 +53,7 @@ do
 	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query-name/pdf/PAT-$test_name-postproc.pdf
 	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/disk_stats/disk-avg-stats-$test_name.csv
 	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/perf.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/perf/perf-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/cpu_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds-$query_name/cpu_stats/cpu-$test_name.csv
 
 	#break
 	cd ~/PAT/PAT-collecting-data/results
