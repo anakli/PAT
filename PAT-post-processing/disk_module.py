@@ -93,7 +93,7 @@ class Disk(pat_base):
             self.wkbps.append(float(self.row[self.wkbps_index]))
             self.await.append(float(self.row[self.await_index]))
             self.svctm.append(float(self.row[self.svctm_index]))
-            if "xvdc" in self.row[self.device_index]:
+            if "nvme" in self.row[self.device_index]:
                 self.rps_disk1.append(float(self.row[self.rps_index]))
                 self.wps_disk1.append(float(self.row[self.wps_index]))
                 self.rkbps_disk1.append(float(self.row[self.rkbps_index]))
@@ -618,10 +618,11 @@ def plot_graph2(data1, data2, pp, graph_title, result_path):
     data2[3][:] = [i / 1000 for i in data2[3]]
     data2[4][:] = [i / 1000 for i in data2[4]]
     
-    data1_avg_w_mb, count1_w_mb = compute_nonzero_avg_MB(data1[3])
-    data1_avg_r_mb, count1_r_mb = compute_nonzero_avg_MB(data1[4])
-    data2_avg_w_mb, count2_w_mb = compute_nonzero_avg_MB(data2[3])
-    data2_avg_r_mb, count2_r_mb = compute_nonzero_avg_MB(data2[4])
+    # compute average disregarding first 30 seconds (warmup time, query hasn't started yet)
+    data1_avg_w_mb, count1_w_mb = compute_nonzero_avg_MB(data1[3][30:])
+    data1_avg_r_mb, count1_r_mb = compute_nonzero_avg_MB(data1[4][30:])
+    data2_avg_w_mb, count2_w_mb = compute_nonzero_avg_MB(data2[3][30:])
+    data2_avg_r_mb, count2_r_mb = compute_nonzero_avg_MB(data2[4][30:])
 
     print ""
     print "Avg wr MB/s input/output: " , data1_avg_w_mb
@@ -742,10 +743,9 @@ def plot_graph(data, pp, graph_title, result_path):
              horizontalalignment='left', verticalalignment='top')
 
 
-    # TODO: calculate average and print to file
-
-    data_avg_w, count = compute_nonzero_avg_IOPS(data[1])
-    data_avg_r, count = compute_nonzero_avg_IOPS(data[2])
+    # compute average disregarding first 30 seconds of test (warmup time)
+    data_avg_w, count = compute_nonzero_avg_IOPS(data[1][30:])
+    data_avg_r, count = compute_nonzero_avg_IOPS(data[2][30:])
     print "Avg wr IOPS total: " , data_avg_w
     print "Avg rd IOPS total: " , data_avg_r
 
