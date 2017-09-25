@@ -2,7 +2,7 @@
 
 cd ~/PAT/PAT-post-processing
 
-FILE="crailterasort400GB-results-master3.csv"
+FILE="crailterasort400GB-results-master1.csv"
 touch $FILE
 
 for disk_stat_name in ~/PAT/PAT-collecting-data/results/crailterasort400GB/disk_stats/disk-avg-stats-*
@@ -16,6 +16,8 @@ do
    	disk1="hdd"
    	if [[ ($disk_stat_name == *"SSD"*) || ($disk_stat_name == *"ssd"*)  ]]; then
    		disk2="ssd"
+      	elif [[ ($disk_stat_name == *"NVMe"*) || ($disk_stat_name == *"nvme"*) ]]; then
+		disk2="nvme"
    	else
    		disk2="hdd"
    	fi
