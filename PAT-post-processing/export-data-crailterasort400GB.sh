@@ -12,7 +12,7 @@ do
    cpu_stat_name=${disk_stat_name%"disk_"*}"cpu_stats/cpu-"$test_name".csv" 
 
    echo $test_name
-   if [[ ($disk_stat_name == *"HDD"*) || ($disk_stat_name == *"hdd"*) ]] ; then
+   if [[ ($disk_stat_name == *"HDD"*) || ($disk_stat_name == *"hdd"*) || ($disk_stat_name == *"hhd"*) ]] ; then
    	disk1="hdd"
    	if [[ ($disk_stat_name == *"SSD"*) || ($disk_stat_name == *"ssd"*)  ]]; then
    		disk2="ssd"
