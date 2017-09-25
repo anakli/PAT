@@ -75,7 +75,7 @@ do
        echo -n `cat $cpu_stat_name` >> $FILE
        echo -n "," >> $FILE
 
-       milisec=`cat ~/PAT/PAT-collecting-data/results/$test_name/jobhistory/stdout | grep "Execution time"  | awk '{ print $4 }'`
+       milisec=`cat ~/PAT/PAT-collecting-data/results/$test_name/jobhistory/stdout | grep "Execution time"  | awk '{ print $4 }'| tr -dc '0-9'`
        if ! [[ $milisec =~ $numeric_regex ]] ; then
 	  echo -n "failed" >> $FILE
        else
