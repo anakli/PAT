@@ -25,7 +25,10 @@ do
       	disk1="hdd"
       	if [[ ($disk_stat_name == *"SSD"*) || ($disk_stat_name == *"ssd"*)  ]]; then
       		disk2="ssd"
-      	else
+      	elif [[ ($disk_stat_name == *"NVMe"*) || ($disk_stat_name == *"nvme"*) ]]; then
+		echo "disk2 is nvme!!!"
+		disk2="nvme"
+	else
       		disk2="hdd"
       	fi
       elif [[ ($disk_stat_name == *"SSD"*) || ($disk_stat_name == *"ssd"*) ]] ; then

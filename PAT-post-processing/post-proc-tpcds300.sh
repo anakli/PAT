@@ -89,12 +89,12 @@ do
 
 	sed -i "55s/.*/\t<source>\/home\/ubuntu\/PAT\/PAT-collecting-data\/results\/${test_name}\/instruments<\/source>/" config.xml
 	./pat-post-process.py
-	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-$test_name-postproc.pdf
-	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk-avg-stats-$test_name.csv
-	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/perf.csv /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/perf-$test_name.csv
-	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-$query-name/pdf/PAT-$test_name-postproc.pdf
-	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-$query_name/disk_stats/disk-avg-stats-$test_name.csv
-	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/perf.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-$query_name/perf/perf-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/PAT-$test_name-postproc.pdf
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/disk-avg-stats-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/perf.csv /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/perf-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/${test_name}/instruments/PAT-Result.pdf /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-${query_name}/pdf/PAT-$test_name-postproc.pdf
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/disk_avg_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-${query_name}/disk_stats/disk-avg-stats-$test_name.csv
+	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/perf.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-${query_name}/perf/perf-$test_name.csv
 	cp /home/ubuntu/PAT/PAT-collecting-data/results/$test_name/instruments/cpu_stats.csv /home/ubuntu/PAT/PAT-collecting-data/results/tpcds300-$query_name/cpu_stats/cpu-$test_name.csv
 
 	#break
