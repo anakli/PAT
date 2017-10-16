@@ -2,7 +2,7 @@
 
 cd ~/PAT/PAT-post-processing
 
-FILE="tpcds300-results-master1.csv"
+FILE="tpcds300-results-master4.csv"
 touch $FILE
 
 for i in {1..13} 15 {17..22} {24..93} {96..99}
@@ -29,6 +29,13 @@ do
       	fi
       elif [[ ($disk_stat_name == *"SSD"*) || ($disk_stat_name == *"ssd"*) ]] ; then
       	disk1="ssd"
+      	if [[ ($disk_stat_name == *"NVMe"*) || ($disk_stat_name == *"nvme"*)  ]]; then
+      		disk2="nvme"
+      	else
+      		disk2="ssd"
+      	fi
+      elif [[ ($disk_stat_name == *"S3"*) || ($disk_stat_name == *"s3"*) ]] ; then
+      	disk1="s3"
       	if [[ ($disk_stat_name == *"NVMe"*) || ($disk_stat_name == *"nvme"*)  ]]; then
       		disk2="nvme"
       	else
