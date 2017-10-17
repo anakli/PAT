@@ -27,7 +27,7 @@ do
       	else
       		disk2="hdd"
       	fi
-      elif [[ ($disk_stat_name == *"S3"*) || ($disk_stat_name == *"s3"*) ]] ; then
+      elif [[ ($disk_stat_name == *"S3"*) || ($disk_stat_name == *"s3-"*) ]] ; then
       	disk1="s3"
       	if [[ ($disk_stat_name == *"NVMe"*) || ($disk_stat_name == *"nvme"*)  ]]; then
       		disk2="nvme"
