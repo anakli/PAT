@@ -76,7 +76,7 @@ do
 	  #echo -n "$disk1, $disk2, $num_cores, $ram," >> $FILE
 	  echo -n "$query_name, $num_cores, $ram, $disk1, $disk2, " >> $FILE
 	  echo -n ", , , , , , , , , , , ," >> $FILE
-	  if [ "$disk1" = "$disk2" ]; then
+	  if [ "$disk1" = "$disk2" ]  || [ "$disk1" = "s3" ]; then
 		  echo -n "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0," >> $FILE
 		  echo -n `cat $disk_stat_name` >> $FILE
 		  echo -n "," >> $FILE
