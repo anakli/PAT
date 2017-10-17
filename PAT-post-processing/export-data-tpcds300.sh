@@ -2,7 +2,7 @@
 
 cd ~/PAT/PAT-post-processing
 
-FILE="tpcds300-results-master1.csv"
+FILE="tpcds300-results-master4.csv"
 touch $FILE
 
 for i in {1..13} 15 {17..22} {24..93} {96..99}
