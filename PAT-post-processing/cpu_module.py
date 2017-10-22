@@ -265,24 +265,26 @@ def plot_graph(data_array, pp, graph_title, result_path):
     ax1 = fig.add_subplot(111)
     if res < 1:
         res = 1
-    fig_caption = "resolution - 1:" + str(res)
+    fig_caption = "" #"resolution - 1:" + str(res)
     fig.text(0.14, 0.89, fig_caption, fontsize=10,
              horizontalalignment='left', verticalalignment='top')
     # plots graphs
 
-    ax1.plot(time_stamp_array, nice_percent, label='nice',
+    time_stamp_array1 = list(map(lambda x: x - 30, time_stamp_array))
+    x1 = list(map(lambda a: a - 30, x))
+    ax1.plot(time_stamp_array1[30:], nice_percent[30:], label='nice',
              color='#338533', alpha=0.5, linewidth=0.4, rasterized=True)
-    ax1.plot(time_stamp_array, steal_percent, label='steal',
+    ax1.plot(time_stamp_array1[30:], steal_percent[30:], label='steal',
              color='#663300', alpha=0.5, linewidth=0.4, rasterized=True)
-    ax1.plot(time_stamp_array, idle_percent, label='idle',
+    ax1.plot(time_stamp_array1[30:], idle_percent[30:], label='idle',
              color='#a35019', alpha=0.5, linewidth=0.4, rasterized=True)
-    ax1.plot(time_stamp_array, iowait_percent, label='iowait',
+    ax1.plot(time_stamp_array1[30:], iowait_percent[30:], label='iowait',
              color='#47008f', alpha=0.5, linewidth=0.4, rasterized=True)
-    ax1.plot(time_stamp_array, system_percent, label='system',
+    ax1.plot(time_stamp_array1[30:], system_percent[30:], label='system',
              color='#a00000', alpha=0.5, linewidth=0.4, rasterized=True)
-    ax1.plot(time_stamp_array, user_percent, label='user',
+    ax1.plot(time_stamp_array1[30:], user_percent[30:], label='user',
              color='#194d99', alpha=0.5, linewidth=0.4, rasterized=True)
-    ax1.axis((0, max(x), 0, 105))
+    ax1.axis((0, max(x1), 0, 105))
 
     # generate legend for the graph
     user_patch = mpatches.Patch(color='#194d99', label='user', alpha=0.45)
@@ -291,31 +293,33 @@ def plot_graph(data_array, pp, graph_title, result_path):
     iowait_patch = mpatches.Patch(color='#47008f', label='iowait', alpha=0.45)
     steal_patch = mpatches.Patch(color='#663300', label='steal', alpha=0.45)
     # idle_patch = mpatches.Patch(color='#a35019', label='idle', alpha=0.45)
-    ax1.legend([user_patch, nice_patch, system_patch, iowait_patch,
-                steal_patch], ['user', 'nice', 'system', 'iowait',
-                               'steal'], prop={'size': 10},
-               framealpha=0.5)
+    ax1.legend([user_patch, system_patch, iowait_patch], ['user', 'system', 'iowait'
+               ], prop={'size': 20},
+               framealpha=0.25)
 
     # fill in the graphs
-    ax1.fill_between(x, user_percent, nice_percent, rasterized=True,
+    ax1.fill_between(x1, user_percent, nice_percent, rasterized=True,
                      facecolor='#338533', alpha=0.45, linewidth=0.2)
-    ax1.fill_between(x, nice_percent, system_percent, rasterized=True,
+    ax1.fill_between(x1, nice_percent, system_percent, rasterized=True,
                      facecolor='#a00000', alpha=0.45, linewidth=0.2)
-    ax1.fill_between(x, system_percent, iowait_percent, rasterized=True,
+    ax1.fill_between(x1, system_percent, iowait_percent, rasterized=True,
                      facecolor='#47008f', alpha=0.45, linewidth=0.2)
-    ax1.fill_between(x, iowait_percent, steal_percent, rasterized=True,
+    ax1.fill_between(x1, iowait_percent, steal_percent, rasterized=True,
                      facecolor='#663300', alpha=0.45, linewidth=0.2)
     # ax1.fill_between(x, steal_percent, idle_percent, rasterized=True,
     #                  facecolor='#a35019', alpha=0.45, linewidth=0.2)
-    ax1.fill_between(x, 0, user_percent, facecolor='#194d99', rasterized=True,
+    ax1.fill_between(x1, 0, user_percent, facecolor='#194d99', rasterized=True,
                      alpha=0.45, linewidth=0.5)
     ax1.set_ylabel('%Utilization')
-    ax1.set_xlabel('time(s)')
-    ax1.set_title(graph_title + ' cpu utilization')
+    ax1.set_xlabel('Time(s)')
+    #ax1.set_title(graph_title + ' CPU utilization')
     ax1.grid(True)
-    fig.text(0.95, 0.05, pp.get_pagecount()+1, fontsize=10)
-    plt.axhline(y=avg_cpu_util, color='#800000', linestyle='--')
-    plt.axhline(y=avg_iowait, color='#00297A', linestyle='--')
+    plt.rc('font', size=20)
+    plt.rc('axes', titlesize=20)
+    plt.rc('axes', labelsize=20)
+    #fig.text(0.95, 0.05, pp.get_pagecount()+1, fontsize=18)
+    plt.axhline(y=avg_cpu_util, color='#008800', linestyle='-.', linewidth=4)
+    plt.axhline(y=avg_iowait, color='#6a5acd', linestyle='--', linewidth=4)
     pp.savefig(dpi=200)
     plt.clf()
     plt.close()
